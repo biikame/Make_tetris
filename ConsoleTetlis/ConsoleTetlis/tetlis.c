@@ -30,7 +30,7 @@ void Tetlis_main(){
 		Tetlis_draw(&view,&model,&tetorimino,&tetoriminoData);
 		
 		Tetlis_getKey(&view,&model,&tetorimino,&tetoriminoData);
-		Tetlis_set(&view,&model,&tetorimino,&tetoriminoData);
+	
 		Tetlis_deleteBlock(&view,&model,&tetorimino,&tetoriminoData);
 
 		if(Tetlis_checkBlockInModel(&view,&model,&tetorimino,&tetoriminoData)){
@@ -65,7 +65,7 @@ void Tetlis_initBlock(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODA
 }
 void Tetlis_draw(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *setTetoriminoData){
 
-	system("cls");
+	//system("cls");
 
 	View_draw(view);
 	//Model_draw(model);
@@ -98,6 +98,8 @@ void Tetlis_getKey(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA 
 		Model_getkey(model,tetorimino,tetoriminoData);
 	//}
 	Model_moveBlock(model,tetorimino,tetoriminoData);
+
+	Tetlis_set(view,model,tetorimino,tetoriminoData);
 }
 
 void Tetlis_rotate(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){

@@ -115,7 +115,8 @@ int Model_checkBlockInModel(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *t
 				
 				if(model->data[y+checkY-tetoriminoData->gapBlockY][x+checkX-tetoriminoData->gapBlockX] > 0 ||
 					(x+checkX-tetoriminoData->gapBlockX)>=enumhMCOL ||(x+checkX-tetoriminoData->gapBlockX)<0|| 
-					(y+checkY-tetoriminoData->gapBlockY)>=enumhMROW ||(y+checkY-tetoriminoData->gapBlockY)<0){//ステージデータ+check位置
+					(y+checkY-tetoriminoData->gapBlockY)>=enumhMROW ||(y+checkY-tetoriminoData->gapBlockY)<0)
+				{//ステージデータ+check位置
 					return 0;
 				}
 			}
@@ -148,10 +149,28 @@ void Model_rotate(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoD
 	}else{
 		tetoriminoData->roll++;
 	}
+	
 	Tetrimino_updateTetoriminoData(tetoriminoData,tetorimino);//ずれをあわせる
 
 	if(Model_checkBlockInModel(model,tetorimino,tetoriminoData,tetoriminoData->blockY,tetoriminoData->blockX)==0){
-		tetoriminoData->roll--;
+		printf("tet.roll%d\n",tetoriminoData->roll);
+		printf("tet.z%d\n",tetoriminoData->z);
+		printf("koko\n");
+		if(tetoriminoData->roll==0){//ここで２時間バグ取り
+			tetoriminoData->roll=enumhROLL-1;
+		}else{
+			tetoriminoData->roll--;
+		}
 		Tetrimino_updateTetoriminoData(tetoriminoData,tetorimino);//ずれをあわせる
+		printf("tet.roll%d\n",tetoriminoData->roll);
+		printf("tet.z%d\n",tetoriminoData->z);
+	
+	}else{
+		printf("tet.roll%d\n",tetoriminoData->roll);
+		printf("tet.z%d\n",tetoriminoData->z);
+		printf("kiki\n");
+		Tetrimino_updateTetoriminoData(tetoriminoData,tetorimino);//ずれをあわせる
+		printf("tet.z%d\n",tetoriminoData->z);
+		printf("tet.roll%d\n",tetoriminoData->roll);
 	}
 }
