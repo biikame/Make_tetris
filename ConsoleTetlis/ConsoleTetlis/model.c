@@ -153,24 +153,61 @@ void Model_rotate(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoD
 	Tetrimino_updateTetoriminoData(tetoriminoData,tetorimino);//ずれをあわせる
 
 	if(Model_checkBlockInModel(model,tetorimino,tetoriminoData,tetoriminoData->blockY,tetoriminoData->blockX)==0){
-		printf("tet.roll%d\n",tetoriminoData->roll);
-		printf("tet.z%d\n",tetoriminoData->z);
-		printf("koko\n");
+		
 		if(tetoriminoData->roll==0){//ここで２時間バグ取り
 			tetoriminoData->roll=enumhROLL-1;
 		}else{
 			tetoriminoData->roll--;
 		}
 		Tetrimino_updateTetoriminoData(tetoriminoData,tetorimino);//ずれをあわせる
-		printf("tet.roll%d\n",tetoriminoData->roll);
-		printf("tet.z%d\n",tetoriminoData->z);
+	
 	
 	}else{
-		printf("tet.roll%d\n",tetoriminoData->roll);
-		printf("tet.z%d\n",tetoriminoData->z);
-		printf("kiki\n");
+		
 		Tetrimino_updateTetoriminoData(tetoriminoData,tetorimino);//ずれをあわせる
-		printf("tet.z%d\n",tetoriminoData->z);
-		printf("tet.roll%d\n",tetoriminoData->roll);
 	}
 }
+void Model_deleteLine(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData,int deleteLine){
+	int x,y;
+	//for(x=0;x<enumhMCOL;x++){//一列揃ったデータを消してます
+	//	model->data[deleteLine][x] = 0;
+	//}
+	for(y=deleteLine-1;y>=0;y--){
+		for(x=0;x<enumhMCOL;x++){
+			if(y){//0の時の1の処理してない　いいポイント
+				Model_setBlock(model,y+1,x,model->data[y][x]);
+			}else{
+				//0の時の1の処理してない所を直した
+				Model_setBlock(model,y+1,x,model->data[y][x]);
+				Model_setBlock(model,y,x,0);
+			}
+		}
+	}
+}
+void Model_checkLine(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
+	int y,x;
+	for(y=enumhMROW-1;y>0;y--){
+		
+		for(x=0;x<enumhMCOL;x++){
+			if(model->data[y][x] == 0){
+				break;
+			}else if(x == enumhMCOL-1){//ブロックが一列揃っている
+				Model_deleteLine(model,tetorimino,tetoriminoData,y);
+				y++;
+			}
+		}
+	}
+}
+int Model_gameOver(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
+	int y,x;
+	for(y=0;y<enumhMROW;y++){
+		for(x=0;x<enumhMCOL;x++){
+			if(model->data[y][x] > 2){
+				return 0;
+			}
+		}
+	}
+	return 1;
+}
+//enumhMROW = 20,
+//	enumhMCOL = 10,

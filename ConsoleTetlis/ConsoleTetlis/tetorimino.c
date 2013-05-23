@@ -228,17 +228,10 @@ void Tetrimino_getRandamTetris(TETRIMINO *tetorimino){
 			j++;
 			
 		}
-
-		
 		for(i=0;i<enumhTETORIMINO_NUM;i++){
 			tetorimino->randTetris[i] = randData[i+1];		
 		}
-		//get
-
-		printf("get\n");
-		for(i=0;i<enumhTETORIMINO_NUM;i++){
-			printf("tetorimino->randTetris[%d]=%d\n",i,tetorimino->randTetris[i]);
-		}
+		
 	}
 	
 }
@@ -249,10 +242,7 @@ void Tetrimino_resetRandamTetris(TETRIMINO *tetorimino){
 		tetorimino->randTetris[i]	= 0;
 		
 	}
-	printf("reset\n");
-	for(i=0;i<enumhTETORIMINO_NUM;i++){
-		printf("tetorimino->randTetris[%d]=%d\n",i,tetorimino->randTetris[i]);
-	}
+	
 }
 void Tetrimino_setTetoriminoData(TETORIMINODATA *tetoriminoData,TETRIMINO *tetorimino){
 
@@ -265,7 +255,6 @@ void Tetrimino_setTetoriminoData(TETORIMINODATA *tetoriminoData,TETRIMINO *tetor
 	initialize.z = (*tetorimino->randTetris)-1;
 	
 	*tetoriminoData = initialize;
-	printf("tet.z%d\n",tetoriminoData->z);
 	
 	Tetrimino_resetRandamTetris(tetorimino);
 	

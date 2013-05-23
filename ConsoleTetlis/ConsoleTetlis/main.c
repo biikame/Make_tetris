@@ -16,7 +16,6 @@
 *******/
 
 int main(void){
-
 	Tetlis_main();
 
 	return 0;

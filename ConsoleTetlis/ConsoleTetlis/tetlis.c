@@ -28,18 +28,27 @@ void Tetlis_main(){
 			
 		}
 		Tetlis_draw(&view,&model,&tetorimino,&tetoriminoData);
+
+		if(Tetlis_gameOver(&view,&model,&tetorimino,&tetoriminoData)==0)
+			break;
 		
 		Tetlis_getKey(&view,&model,&tetorimino,&tetoriminoData);
 	
 		Tetlis_deleteBlock(&view,&model,&tetorimino,&tetoriminoData);
-
+		//一升先のデータを確認、ブロックがあれば固定
 		if(Tetlis_checkBlockInModel(&view,&model,&tetorimino,&tetoriminoData)){
 			Tetlis_set(&view,&model,&tetorimino,&tetoriminoData);
 		}else{
+			//列が揃っていたら消す処理
+			Tetlis_deleteLine(&view,&model,&tetorimino,&tetoriminoData);
+
 			Tetlis_set(&view,&model,&tetorimino,&tetoriminoData);
 			Tetlis_initBlock(&view,&model,&tetorimino,&tetoriminoData);
 		}
+		
 	}
+	
+	printf("GameOver");
 	//デバック用
 	//Model_main();
 	//View_main();
@@ -65,7 +74,7 @@ void Tetlis_initBlock(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODA
 }
 void Tetlis_draw(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *setTetoriminoData){
 
-	//system("cls");
+	system("cls");
 
 	View_draw(view);
 	//Model_draw(model);
@@ -94,9 +103,9 @@ int Tetlis_checkBlockInModel(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETOR
 void Tetlis_getKey(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
 
 	Tetlis_deleteBlock(view,model,tetorimino,tetoriminoData);
-	//if(kbhit()){
+	if(kbhit()){//毎回取得してくれる
 		Model_getkey(model,tetorimino,tetoriminoData);
-	//}
+	}
 	Model_moveBlock(model,tetorimino,tetoriminoData);
 
 	Tetlis_set(view,model,tetorimino,tetoriminoData);
@@ -105,4 +114,12 @@ void Tetlis_getKey(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA 
 void Tetlis_rotate(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
 	Model_rotate(model,tetorimino,tetoriminoData);
 	Model_setBlockInModel(model,tetorimino,tetoriminoData);
+}
+void Tetlis_deleteLine(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
+	Model_checkLine(model,tetorimino,tetoriminoData);
+}
+int Tetlis_gameOver(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
+	if(Model_gameOver(model,tetorimino,tetoriminoData)==0){
+		return 0;
+	}
 }
