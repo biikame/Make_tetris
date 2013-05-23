@@ -56,6 +56,7 @@ void Tetrimino_getRandamTetris(TETRIMINO *tetorimino);
 void Tetrimino_resetRandamTetris(TETRIMINO *tetorimino);
 
 void Tetrimino_setTetoriminoData(TETORIMINODATA *setTetoriminoData,TETRIMINO *tetorimino);
+void Tetrimino_updateTetoriminoData(TETORIMINODATA *setTetoriminoData,TETRIMINO *tetorimino);
 
 void Tetrimino_setBlock(TETRIMINO *tetorimino);
 

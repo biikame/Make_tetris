@@ -94,12 +94,13 @@ int Tetlis_checkBlockInModel(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETOR
 void Tetlis_getKey(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
 
 	Tetlis_deleteBlock(view,model,tetorimino,tetoriminoData);
-	if(kbhit()){
+	//if(kbhit()){
 		Model_getkey(model,tetorimino,tetoriminoData);
-	}
+	//}
 	Model_moveBlock(model,tetorimino,tetoriminoData);
 }
 
 void Tetlis_rotate(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
 	Model_rotate(model,tetorimino,tetoriminoData);
+	Model_setBlockInModel(model,tetorimino,tetoriminoData);
 }

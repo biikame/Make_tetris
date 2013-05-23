@@ -148,5 +148,10 @@ void Model_rotate(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoD
 	}else{
 		tetoriminoData->roll++;
 	}
+	Tetrimino_updateTetoriminoData(tetoriminoData,tetorimino);//ずれをあわせる
 
+	if(Model_checkBlockInModel(model,tetorimino,tetoriminoData,tetoriminoData->blockY,tetoriminoData->blockX)==0){
+		tetoriminoData->roll--;
+		Tetrimino_updateTetoriminoData(tetoriminoData,tetorimino);//ずれをあわせる
+	}
 }

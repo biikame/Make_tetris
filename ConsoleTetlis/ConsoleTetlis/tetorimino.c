@@ -242,52 +242,60 @@ void Tetrimino_resetRandamTetris(TETRIMINO *tetorimino){
 	}
 }
 void Tetrimino_setTetoriminoData(TETORIMINODATA *tetoriminoData,TETRIMINO *tetorimino){
-	
-	int y,x;int i;
-	int *mapData;
-
-	typedef struct DATA{
-		unsigned int flag,flagX,flagY;
-	}DATA;
 
 	TETORIMINODATA initialize = {0,0,0,0,
 								 0,0,
 								 3,0};
-
-	DATA set = {1,0,1,};
 
 	Tetrimino_getRandamTetris(tetorimino);
 
 	initialize.z = *(tetorimino->randTetris);
 	
 	*tetoriminoData = initialize;
-
-	tetoriminoData->gapBlockX = 4;
 	
 	Tetrimino_resetRandamTetris(tetorimino);
 	
-	mapData =&tetorimino->data[tetoriminoData->z].data[tetoriminoData->roll].data[tetoriminoData->y][tetoriminoData->x];// &(*(*(*(tetorimino->data+tetoriminoData->z)->data).data));//&tetorimino->data[tetoriminoData->z].data[tetoriminoData->roll].data[tetoriminoData->y][tetoriminoData->x];
+	Tetrimino_updateTetoriminoData(tetoriminoData,tetorimino);
+}
+
+void Tetrimino_updateTetoriminoData(TETORIMINODATA *setTetoriminoData,TETRIMINO *tetorimino){
+	
+	int y,x;int i;
+	int *mapData;
+
+	TETORIMINODATA initialize = {setTetoriminoData->x,setTetoriminoData->y,setTetoriminoData->roll,setTetoriminoData->z,
+								4,0,
+								setTetoriminoData->blockX,setTetoriminoData->blockY};
+
+	typedef struct DATA{
+		unsigned int flag,flagX,flagY;
+	}DATA;
+
+	DATA set = {1,0,1,};
+
+	*setTetoriminoData = initialize;
+
+	mapData =&tetorimino->data[setTetoriminoData->z].data[setTetoriminoData->roll].data[setTetoriminoData->y][setTetoriminoData->x];// &(*(*(*(tetorimino->data+tetoriminoData->z)->data).data));//&tetorimino->data[tetoriminoData->z].data[tetoriminoData->roll].data[tetoriminoData->y][tetoriminoData->x];
 
 	for(y=0;y<enumhTETLIS_BLOCK;y++){
 		set.flagX = 0;
 		for(x=0;x<enumhTETLIS_BLOCK;x++){
 			if(mapData[y*enumhTETLIS_BLOCK+x] == 1 ||mapData[y*enumhTETLIS_BLOCK+x] == 2){
 				if(set.flagY){
-					tetoriminoData->gapBlockY = y;
-					tetoriminoData->gapBlockX = MIN(x,tetoriminoData->gapBlockX);
+					setTetoriminoData->gapBlockY = y;
+					setTetoriminoData->gapBlockX = MIN(x,setTetoriminoData->gapBlockX);
 					set.flagY = 0;set.flagX++;
 				}else{
-					tetoriminoData->gapBlockX = MIN(x,tetoriminoData->gapBlockX);
+					setTetoriminoData->gapBlockX = MIN(x,setTetoriminoData->gapBlockX);
 					set.flagX++;
 					if(set.flagX>=2)
 						set.flag = 0;
 				}
 			}
-			if(mapData[y*enumhTETLIS_BLOCK+x] == 2 && tetoriminoData->gapBlockX == x){
-				tetoriminoData->gapBlockX--;
+			if(mapData[y*enumhTETLIS_BLOCK+x] == 2 && setTetoriminoData->gapBlockX == x){
+				setTetoriminoData->gapBlockX--;
 			}
 		}
 	}
-	if(set.flag)tetoriminoData->gapBlockX--;
+	if(set.flag)setTetoriminoData->gapBlockX--;
 }
-
