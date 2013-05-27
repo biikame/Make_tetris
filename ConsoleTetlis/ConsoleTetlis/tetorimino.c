@@ -2,6 +2,7 @@
 * Include *
 **********/
 #include "tetorimino.h"
+
 /**********************
 * Function definition *
 **********************/
@@ -140,7 +141,7 @@ void Tetrimino_init(TETRIMINO *tetorimino){
 			{
 				0,0,0,0,0,//□ □ □ □ □
                 0,0,0,0,0,//□ □ □ □ □
-                0,1, 2,1,0,//□ ■ ■ ■ □
+                0,1,2,1,0,//□ ■ ■ ■ □
                 0,1,0,0,0,//□ ■ □ □ □
                 0,0,0,0,0,//□ □ □ □ □
            
@@ -191,9 +192,8 @@ void Tetrimino_init(TETRIMINO *tetorimino){
 	};
 	*tetorimino =initialize;
 }
-void Tetrimino_draw(TETORIMINODATA *setTetoriminoData,TETRIMINO *const tetorimino){
+void Tetrimino_draw(TETORIMINODATA *setTetoriminoData,const TETRIMINO *tetorimino){
 	int y,x;
-	printf("tetorimino\n");
 	for(y=0;y<enumhTETLIS_BLOCK;y++){
 		for(x=0;x<enumhTETLIS_BLOCK;x++){
 			switch( tetorimino->data[setTetoriminoData->z].data[setTetoriminoData->roll].data[y][x]){//model->data[i][j]
@@ -263,7 +263,7 @@ void Tetrimino_setTetoriminoData(TETORIMINODATA *tetoriminoData,TETRIMINO *tetor
 
 void Tetrimino_updateTetoriminoData(TETORIMINODATA *setTetoriminoData,TETRIMINO *tetorimino){
 	
-	int y,x;int i;
+	int y,x;
 	int *mapData;
 
 	TETORIMINODATA initialize = {setTetoriminoData->x,setTetoriminoData->y,setTetoriminoData->roll,setTetoriminoData->z,
@@ -301,4 +301,23 @@ void Tetrimino_updateTetoriminoData(TETORIMINODATA *setTetoriminoData,TETRIMINO 
 		}
 	}
 	if(set.flag)setTetoriminoData->gapBlockX--;
+}
+
+void Tetrimino_nextBlock(TETRIMINO *tetorimino){
+
+	TETORIMINODATA initialze ={ 0,0,0,(tetorimino->randTetris[0]-1),
+								0,0,
+								0,0};
+	
+	//描画
+	//printf("next BLock\n");
+	Tetrimino_draw(&initialze,tetorimino);
+	
+	initialze.z = (tetorimino->randTetris[1]-1);
+	//printf("nextnext BLock\n");
+	Tetrimino_draw(&initialze,tetorimino);
+}
+
+void Tetrimino_seeNextBlock(TETRIMINO *tetorimino){
+	
 }

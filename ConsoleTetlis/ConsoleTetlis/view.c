@@ -4,7 +4,6 @@
 #include "pch.h"
 #include "view.h"
 #include "model.h"
-
 /**********************
 * Function definition *
 **********************/

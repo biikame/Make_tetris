@@ -34,8 +34,8 @@ void Tetlis_deleteBlock			(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIM
 int Tetlis_checkBlockInModel	(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData);
 void Tetlis_getKey				(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData);
 
-void Tetlis_rotate				(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData);
 void Tetlis_deleteLine			(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData);
-int Tetlis_gameOver			(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData);
+int Tetlis_gameOver				(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData);
+void Tetlis_nextBlock			(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData);
 
 #endif __TETLIS_H__

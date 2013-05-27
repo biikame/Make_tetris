@@ -25,9 +25,9 @@ enum{
 *****************/
 #define MAX(vo1,vo2)(vo1>vo2? vo1:vo2)	//()は必ず書くと
 #define MIN(vo1,vo2)(vo1<vo2? vo1:vo2)	//()
-/********
-* Strct *
-********/
+/*********
+* struct *
+*********/
 typedef struct  BLOCK{
 	int data[enumhTETLIS_BLOCK][enumhTETLIS_BLOCK];
 }BLOCK;
@@ -59,5 +59,8 @@ void Tetrimino_setTetoriminoData(TETORIMINODATA *setTetoriminoData,TETRIMINO *te
 void Tetrimino_updateTetoriminoData(TETORIMINODATA *setTetoriminoData,TETRIMINO *tetorimino);
 
 void Tetrimino_setBlock(TETRIMINO *tetorimino);
+
+void Tetrimino_nextBlock(TETRIMINO *tetorimino);
+void Tetrimino_seeNextBlock(TETRIMINO *tetorimino);
 
 #endif __TETORIMINO__

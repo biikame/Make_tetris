@@ -13,11 +13,12 @@
 *******/
 enum {
         enumhVROW =22,
-        enumhVCOL =12,
+        enumhVCOL =12+10,
 };
 /***********
 * Variable *
 ***********/
+
 /********
 * Strct *
 ********/

@@ -55,7 +55,7 @@ void Model_moveBlock			(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetor
 
 void Model_getkey				(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData);
 
-void Model_rotate				(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData);
+void Model_rotate				(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData,int flag);
 void Model_checkLine			(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData);
 void Model_deleteLine			(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData,int deleteLine);
 int Model_gameOver				(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData);

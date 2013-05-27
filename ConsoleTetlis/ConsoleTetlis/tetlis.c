@@ -13,7 +13,7 @@ void Tetlis_main(){
 
 	VIEW view;
 	MODEL model;
-	TETRIMINO tetorimino;
+	TETRIMINO tetorimino,nextBlock;
 	TETORIMINODATA tetoriminoData;
 
 	int timer;
@@ -28,6 +28,7 @@ void Tetlis_main(){
 			
 		}
 		Tetlis_draw(&view,&model,&tetorimino,&tetoriminoData);
+		
 
 		if(Tetlis_gameOver(&view,&model,&tetorimino,&tetoriminoData)==0)
 			break;
@@ -45,9 +46,7 @@ void Tetlis_main(){
 			Tetlis_set(&view,&model,&tetorimino,&tetoriminoData);
 			Tetlis_initBlock(&view,&model,&tetorimino,&tetoriminoData);
 		}
-		
 	}
-	
 	printf("GameOver");
 	//デバック用
 	//Model_main();
@@ -77,15 +76,13 @@ void Tetlis_draw(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *s
 	system("cls");
 
 	View_draw(view);
+	Tetlis_nextBlock(view,model,tetorimino,setTetoriminoData);
 	//Model_draw(model);
 	//Tetrimino_draw(setTetoriminoData,tetorimino);
 }
 void Tetlis_set(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
-	
 	View_setView(view,model);
 }
-
-
 void Tetlis_deleteBlock	(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){	
 	Model_deleteBlockInModel(model,tetorimino,tetoriminoData);
 	View_setView(view,model);
@@ -99,7 +96,6 @@ int Tetlis_checkBlockInModel(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETOR
 		return 0;
 	}	
 }
-
 void Tetlis_getKey(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
 
 	Tetlis_deleteBlock(view,model,tetorimino,tetoriminoData);
@@ -111,10 +107,6 @@ void Tetlis_getKey(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA 
 	Tetlis_set(view,model,tetorimino,tetoriminoData);
 }
 
-void Tetlis_rotate(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
-	Model_rotate(model,tetorimino,tetoriminoData);
-	Model_setBlockInModel(model,tetorimino,tetoriminoData);
-}
 void Tetlis_deleteLine(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
 	Model_checkLine(model,tetorimino,tetoriminoData);
 }
@@ -122,4 +114,7 @@ int Tetlis_gameOver(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA
 	if(Model_gameOver(model,tetorimino,tetoriminoData)==0){
 		return 0;
 	}
+}
+void Tetlis_nextBlock(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
+	Tetrimino_nextBlock(tetorimino);
 }

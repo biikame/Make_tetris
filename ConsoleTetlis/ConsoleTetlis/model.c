@@ -139,17 +139,25 @@ void Model_getkey(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoD
 		case 'd':VX++;break;
 		//case 'w':VX--;break;
 		//case 's':VX++;break;
-		case ' ':Model_rotate(model,tetorimino,tetoriminoData);break;
+		case ' ':Model_rotate(model,tetorimino,tetoriminoData,1);break;
+		case 'r':Model_rotate(model,tetorimino,tetoriminoData,0);break;
 	}
 	Model_checkBlockInModel(model,tetorimino,tetoriminoData,tetoriminoData->blockY+VY,tetoriminoData->blockX+VX);
 }
-void Model_rotate(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
-	if(tetoriminoData->roll == enumhROLL-1){
-		tetoriminoData->roll = 0;
+void Model_rotate(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData,int flag){
+	if(flag){
+		if(tetoriminoData->roll == enumhROLL-1){
+			tetoriminoData->roll = 0;
+		}else{
+			tetoriminoData->roll++;
+		}
 	}else{
-		tetoriminoData->roll++;
+		if(tetoriminoData->roll == 0){
+			tetoriminoData->roll = 3;
+		}else{
+			tetoriminoData->roll--;
+		}
 	}
-	
 	Tetrimino_updateTetoriminoData(tetoriminoData,tetorimino);//ずれをあわせる
 
 	if(Model_checkBlockInModel(model,tetorimino,tetoriminoData,tetoriminoData->blockY,tetoriminoData->blockX)==0){
@@ -160,10 +168,7 @@ void Model_rotate(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoD
 			tetoriminoData->roll--;
 		}
 		Tetrimino_updateTetoriminoData(tetoriminoData,tetorimino);//ずれをあわせる
-	
-	
 	}else{
-		
 		Tetrimino_updateTetoriminoData(tetoriminoData,tetorimino);//ずれをあわせる
 	}
 }
