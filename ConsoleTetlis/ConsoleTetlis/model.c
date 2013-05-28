@@ -4,6 +4,15 @@
 #include "pch.h"
 #include "model.h"
 #include "tetorimino.h"
+#include <Windows.h>
+
+/*******
+* Enum *
+*******/
+enum soundData{
+	BOTTON,
+};
+
 /**********************
 * Function definition *
 **********************/
@@ -126,7 +135,6 @@ int Model_checkBlockInModel(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *t
 	tetoriminoData->blockX = checkX;
 	return 1;
 }
-
 void Model_moveBlock(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
 	Model_setBlockInModel(model,tetorimino,tetoriminoData);
 }
@@ -139,8 +147,8 @@ void Model_getkey(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoD
 		case 'd':VX++;break;
 		//case 'w':VX--;break;
 		//case 's':VX++;break;
-		case ' ':Model_rotate(model,tetorimino,tetoriminoData,1);break;
-		case 'r':Model_rotate(model,tetorimino,tetoriminoData,0);break;
+		case ' ':Model_rotate(model,tetorimino,tetoriminoData,1);Model_sound(BOTTON);break;
+		case 'r':Model_rotate(model,tetorimino,tetoriminoData,0);Model_sound(BOTTON);break;
 	}
 	Model_checkBlockInModel(model,tetorimino,tetoriminoData,tetoriminoData->blockY+VY,tetoriminoData->blockX+VX);
 }
@@ -214,5 +222,11 @@ int Model_gameOver(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetorimino
 	}
 	return 1;
 }
-//enumhMROW = 20,
-//	enumhMCOL = 10,
+void Model_sound(int sound){
+
+	switch(sound){
+		case BOTTON:
+			PlaySound("../BGM/WaVbotan_b46.wav",NULL,SND_FILENAME| SND_ASYNC);
+		break;
+	}
+}

@@ -37,6 +37,7 @@ typedef struct TYPE{
 typedef struct TETRIMINO{
 	TYPE data[enumhTETORIMINO_NUM];
 	int randTetris[enumhTETORIMINO_NUM];
+	char str[1000];
 }TETRIMINO;
 typedef struct TETORIMINODATA{
 	int x,y,roll,z;//４次元配列用

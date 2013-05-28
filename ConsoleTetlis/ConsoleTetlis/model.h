@@ -8,6 +8,7 @@
 **********/
 #include "pch.h"
 #include "tetorimino.h"
+#include <Windows.h>
 /*******
 * Enum *
 *******/
@@ -60,5 +61,6 @@ void Model_checkLine			(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetor
 void Model_deleteLine			(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData,int deleteLine);
 int Model_gameOver				(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData);
 
+void Model_sound(int sound);
 
 #endif __MODEL_H__//省略可能

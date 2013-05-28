@@ -6,6 +6,10 @@
 #include "model.h"
 #include "tetorimino.h"
 #include "tetlis.h"
+#include <Windows.h>
+#include<Mmsystem.h>
+#pragma comment(lib,"winmm")// winmm.lib をリンクする
+
 /**********************
 * Function definition *
 **********************/
@@ -15,6 +19,8 @@ void Tetlis_main(){
 	MODEL model;
 	TETRIMINO tetorimino,nextBlock;
 	TETORIMINODATA tetoriminoData;
+	char *strFile;
+	MCIDEVICEID playID[2];
 
 	int timer;
 
@@ -22,14 +28,19 @@ void Tetlis_main(){
 
 	Tetlis_init(&view,&model,&tetorimino,&tetoriminoData);
 	Tetlis_set(&view,&model,&tetorimino,&tetoriminoData);
+	strFile = "../BGM/WaVKorobeyniki_polka.wav";
+
+	//playID[0]=playSound(strFile);
+
 	while(1){
 
-		for(timer=0;timer<=90000000;timer++){
+		/*for(timer=0;timer<=90000000;timer++){
 			
-		}
+		}*/
+		Sleep(100);
+
 		Tetlis_draw(&view,&model,&tetorimino,&tetoriminoData);
 		
-
 		if(Tetlis_gameOver(&view,&model,&tetorimino,&tetoriminoData)==0)
 			break;
 		
@@ -47,7 +58,9 @@ void Tetlis_main(){
 			Tetlis_initBlock(&view,&model,&tetorimino,&tetoriminoData);
 		}
 	}
-	printf("GameOver");
+/////gameOver処理/////////////////////////////////////////////////////////////
+	Tetlis_drawgameOver(&view,&model,&tetorimino,&tetoriminoData);
+	//stopSound(playID[0]);
 	//デバック用
 	//Model_main();
 	//View_main();
@@ -73,8 +86,6 @@ void Tetlis_initBlock(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODA
 }
 void Tetlis_draw(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *setTetoriminoData){
 
-	system("cls");
-
 	View_draw(view);
 	Tetlis_nextBlock(view,model,tetorimino,setTetoriminoData);
 	//Model_draw(model);
@@ -88,13 +99,9 @@ void Tetlis_deleteBlock	(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMIN
 	View_setView(view,model);
 }
 int Tetlis_checkBlockInModel(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){	
-	if(Model_checkBlockInModel(model,tetorimino,tetoriminoData,tetoriminoData->blockY+1,tetoriminoData->blockX)){
-		Model_moveBlock(model,tetorimino,tetoriminoData);
-		return 1;
-	}else{
-		Model_moveBlock(model,tetorimino,tetoriminoData);
-		return 0;
-	}	
+	int ret = Model_checkBlockInModel(model,tetorimino,tetoriminoData,tetoriminoData->blockY+1,tetoriminoData->blockX);
+	Model_moveBlock(model,tetorimino,tetoriminoData);
+	return ret;
 }
 void Tetlis_getKey(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
 
@@ -117,4 +124,46 @@ int Tetlis_gameOver(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA
 }
 void Tetlis_nextBlock(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
 	Tetrimino_nextBlock(tetorimino);
+}
+
+MCIDEVICEID playSound(char *strFile)
+{
+	static MCI_OPEN_PARMS mop;
+	mop.dwCallback = (DWORD)NULL;
+	mop.lpstrDeviceType = (LPCSTR)MCI_DEVTYPE_WAVEFORM_AUDIO;
+	mop.lpstrElementName = strFile;
+	mciSendCommand(0,MCI_OPEN,MCI_OPEN_TYPE|MCI_OPEN_TYPE_ID|MCI_OPEN_ELEMENT,(DWORD)&mop);
+	mciSendCommand(mop.wDeviceID , MCI_PLAY , 0 , 0);
+	return mop.wDeviceID;
+}
+void stopSound(MCIDEVICEID stopID)
+{
+	mciSendCommand(stopID , MCI_STOP , 0 , 0);
+	return;
+}
+
+void Tetlis_drawgameOver(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
+	View_gameOVer_mixDraw(view,model);
+
+	system("cls");
+
+	printf("\n\
+ 　 　┏━━━━┓　 　 ┏━━┓　 　 ┏━┓　 　 ┏━┓┏━━━━━━┓ \n\
+ 　 ┏┛┏━━━┛　 ┏┛┏┓┗┓　 ┃　 ┗┓┏┛　 ┃┃　 ┏━━━━┛ \n\
+ ┏┛┏┛　 　 　 　 ┏┛┏┛┗┓┗┓┃　 　 ┗┛　 　 ┃┃　 ┃ \n\
+ ┃　 ┃┏━━━┓┃　 ┃　 　 ┃　 ┃┃　 　 　 　 　 　 ┃┃　 ┗━━━┓ \n\
+ ┃　 ┃┗━┓　 ┃┃　 ┗━━┛　 ┃┃　 ┏┓┏┓　 ┃┃　 ┏━━━┛ \n\
+ ┗┓┗┓　 ┃　 ┃┃　 ┏━━┓　 ┃┃　 ┃┗┛┃　 ┃┃　 ┃ \n\
+ 　 ┃　 ┗━┛　 ┃┃　 ┃　 　 ┃　 ┃┃　 ┃　 　 ┃　 ┃┃　 ┗━━━━┓ \n\
+ 　 ┗━━━━━┛┗━┛　 　 ┗━┛┗━┛　 　 ┗━┛┗━━━━━━┛ \n\
+ 　 ┏━━━━┓　 ┏━┓　 　 ┏━┓┏━━━━━━┓┏━━━━━┓ \n\
+ ┏┛┏━━┓┗┓┃　 ┃　 　 ┃　 ┃┃　 ┏━━━━┛┃　 ┏━━┓┗┓ \n\
+ ┃　 ┃　 　 ┃　 ┃┃　 ┃　 　 ┃　 ┃┃　 ┃　 　 　 　 　 ┃　 ┃　 　 ┃　 ┃ \n\
+ ┃　 ┃　 　 ┃　 ┃┃　 ┗┓┏┛　 ┃┃　 ┗━━━┓　 ┃　 ┃　 ┏┛　 ┃ \n\
+ ┃　 ┃　 　 ┃　 ┃┗┓　 ┗┛　 ┏┛┃　 ┏━━━┛　 ┃　 ┗━┛┏━┛ \n\
+ ┃　 ┃　 　 ┃　 ┃　 ┗┓　 　 ┏┛　 ┃　 ┃　 　 　 　 　 ┃　 ┏┓　 ┗┓ \n\
+ ┗┓┗━━┛┏┛　 　 ┗┓┏┛　 　 ┃　 ┗━━━━┓┃　 ┃┗┓　 ┗┓ \n\
+ 　 ┗━━━━┛　 　 　 　 ┗┛　 　 　 ┗━━━━━━┛┗━┛　 ┗━━┛ \n");
+
+	printf("\n");
 }

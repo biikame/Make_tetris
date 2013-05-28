@@ -11,6 +11,8 @@
 #include "model.h"
 #include "tetorimino.h"
 #include <Windows.h>
+#include<Mmsystem.h>
+#pragma comment(lib,"winmm")// winmm.lib をリンクする
 /*******
 * Enum *
 *******/
@@ -37,5 +39,10 @@ void Tetlis_getKey				(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINOD
 void Tetlis_deleteLine			(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData);
 int Tetlis_gameOver				(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData);
 void Tetlis_nextBlock			(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData);
+
+MCIDEVICEID playSound(char *strFile);
+void stopSound(MCIDEVICEID stopID);
+
+void Tetlis_drawgameOver		(VIEW *view,MODEL *model,int flag);
 
 #endif __TETLIS_H__
