@@ -266,13 +266,12 @@ void Tetrimino_getRandamTetris(TETRIMINO *tetorimino){
 			}
 		}
 		k++;
-		j=0;
 	}
 	
 }
 void Tetrimino_resetRandamTetris(TETRIMINO *tetorimino){
 	int i;
-	for(i=1;i<enumhTETORIMINO_NUM+1;i++){
+	for(i=1;i<enumhTETORIMINO_NUM;i++){
 		tetorimino->randTetris[0][i-1] = tetorimino->randTetris[0][i];
 		tetorimino->randTetris[0][i]	= 0;
 		
@@ -281,10 +280,9 @@ void Tetrimino_resetRandamTetris(TETRIMINO *tetorimino){
 void Tetrimino_setgetRandamTetris(TETRIMINO *tetorimino){
 	int i;
 	if(tetorimino->randTetris[0][1] == 0){
-		for(i=0;i<enumhTETORIMINO_NUM+1;i++){
+		for(i=0;i<enumhTETORIMINO_NUM;i++){
 			tetorimino->randTetris[0][i+1] = tetorimino->randTetris[1][i];
 		}
-		tetorimino->randTetris[1][0]=0;
 	}
 }
 void Tetrimino_setTetoriminoData(TETORIMINODATA *tetoriminoData,TETRIMINO *tetorimino){
