@@ -157,8 +157,9 @@ void View_gameOVer_draw(VIEW *const view,MODEL *model){
 			view->data[y+1][x+1] = 1;
 		}
 	}
-	View_draw(view);
 	Sleep(100);
+	View_draw(view);
+	
 
 	View_gameOVer_draw(view,model);
 }
@@ -173,8 +174,9 @@ void View_gameOVer_draw2(VIEW *view,MODEL *model){
 				default: view->data[y+1][x+1]= 3;break;
 			}
 		}
-		View_draw(view);
 		Sleep(100);
+		View_draw(view);
+		
 	}
 }
 
@@ -193,8 +195,9 @@ void View_gameOVer_draw3(VIEW *view,MODEL *model){
 			} 
 		}
 	}
-	View_draw(view);
 	Sleep(100);
+	View_draw(view);
+	
 
 	View_gameOVer_draw3(view,model);
 }
