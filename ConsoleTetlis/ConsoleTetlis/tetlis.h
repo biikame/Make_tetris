@@ -40,8 +40,9 @@ void Tetlis_deleteLine			(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMI
 int Tetlis_gameOver				(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData);
 void Tetlis_nextBlock			(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData);
 
-MCIDEVICEID playSound(char *strFile);
-void stopSound(MCIDEVICEID stopID);
+void Tetlis_setNextRand			(TETRIMINO *tetorimino);
+MCIDEVICEID playSound			(char *strFile);
+void stopSound					(MCIDEVICEID stopID);
 
 void Tetlis_drawgameOver		(VIEW *view,MODEL *model,int flag);
 

@@ -39,6 +39,8 @@ void Tetlis_main(){
 		}*/
 		Sleep(100);
 
+		Tetlis_setNextRand(&tetorimino);
+
 		Tetlis_draw(&view,&model,&tetorimino,&tetoriminoData);
 		
 		if(Tetlis_gameOver(&view,&model,&tetorimino,&tetoriminoData)==0)
@@ -70,7 +72,7 @@ void Tetlis_main(){
 void Tetlis_init(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *setTetoriminoData){
 	Tetlis_initStage(view,model,tetorimino,setTetoriminoData);
 	Tetlis_initBlock(view,model,tetorimino,setTetoriminoData);
-	View_setView(view,model);
+	View_setView(view,model,tetorimino,setTetoriminoData);
 }
 
 void Tetlis_initStage(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *setTetoriminoData){
@@ -86,17 +88,19 @@ void Tetlis_initBlock(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODA
 }
 void Tetlis_draw(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *setTetoriminoData){
 
-	View_draw(view);
+	
 	Tetlis_nextBlock(view,model,tetorimino,setTetoriminoData);
+	View_draw(view);
+	//View_draw_sprintf(view,tetorimino);
 	//Model_draw(model);
 	//Tetrimino_draw(setTetoriminoData,tetorimino);
 }
 void Tetlis_set(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
-	View_setView(view,model);
+	View_setView(view,model,tetorimino,tetoriminoData);
 }
 void Tetlis_deleteBlock	(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){	
 	Model_deleteBlockInModel(model,tetorimino,tetoriminoData);
-	View_setView(view,model);
+	View_setView(view,model,tetorimino,tetoriminoData);
 }
 int Tetlis_checkBlockInModel(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){	
 	int ret = Model_checkBlockInModel(model,tetorimino,tetoriminoData,tetoriminoData->blockY+1,tetoriminoData->blockX);
@@ -123,7 +127,8 @@ int Tetlis_gameOver(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA
 	}
 }
 void Tetlis_nextBlock(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
-	Tetrimino_nextBlock(tetorimino);
+	//Tetrimino_nextBlock(tetorimino);
+	View_setViewNextBlock(view,model,tetorimino,tetoriminoData);
 }
 
 MCIDEVICEID playSound(char *strFile)
@@ -166,4 +171,8 @@ void Tetlis_drawgameOver(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMIN
  　 ┗━━━━┛　 　 　 　 ┗┛　 　 　 ┗━━━━━━┛┗━┛　 ┗━━┛ \n");
 
 	printf("\n");
+}
+
+void Tetlis_setNextRand(TETRIMINO *tetorimino){
+	Tetrimino_setgetRandamTetris(tetorimino);
 }

@@ -37,7 +37,11 @@ int	 View_getBlock	(VIEW *view,int y,int x);
 void View_setBlock	(VIEW *view,int y,int x,int variable);
 
 void View_draw		(const VIEW *view);
-void View_setView	(VIEW *view,MODEL *model);
+void View_setView	(VIEW *view,MODEL *model,TETRIMINO *tetrimino,TETORIMINODATA *setTetoriminoData);
+void View_setViewNextBlock(VIEW *view,MODEL *model,TETRIMINO *tetrimino,TETORIMINODATA *setTetoriminoData);
+
+//sprintf用
+void View_draw_sprintf(VIEW *view,TETRIMINO *tetrimino);
 
 void View_gameOVer_mixDraw(VIEW *view,MODEL *model);
 //gameOver処理の部品

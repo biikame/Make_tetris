@@ -36,7 +36,7 @@ typedef struct TYPE{
 }TYPE;
 typedef struct TETRIMINO{
 	TYPE data[enumhTETORIMINO_NUM];
-	int randTetris[enumhTETORIMINO_NUM];
+	int randTetris[2][enumhTETORIMINO_NUM];
 	char str[1000];
 }TETRIMINO;
 typedef struct TETORIMINODATA{
@@ -53,8 +53,11 @@ void Tetrimino_init2(TETRIMINO *tetorimino);
 
 void Tetrimino_draw(TETORIMINODATA *setTetoriminoData,const TETRIMINO *tetorimino);
 
+void Tetrimino_draw_sprintf(TETORIMINODATA *setTetoriminoData, TETRIMINO *tetorimino);
+
 void Tetrimino_getRandamTetris(TETRIMINO *tetorimino);
 void Tetrimino_resetRandamTetris(TETRIMINO *tetorimino);
+void Tetrimino_setgetRandamTetris(TETRIMINO *tetorimino);
 
 void Tetrimino_setTetoriminoData(TETORIMINODATA *setTetoriminoData,TETRIMINO *tetorimino);
 void Tetrimino_updateTetoriminoData(TETORIMINODATA *setTetoriminoData,TETRIMINO *tetorimino);

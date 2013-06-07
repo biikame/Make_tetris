@@ -208,41 +208,82 @@ void Tetrimino_draw(TETORIMINODATA *setTetoriminoData,const TETRIMINO *tetorimin
 		printf("\n");
 	}
 }
-void Tetrimino_getRandamTetris(TETRIMINO *tetorimino){
-	int i,j;
-	int randData[enumhTETORIMINO_NUM+1];
-	i=0,j=0;
 
-	if(*(tetorimino->randTetris) == 0){
+void Tetrimino_draw_sprintf(TETORIMINODATA *setTetoriminoData, TETRIMINO *tetorimino){
+	int y,x,i;
+	char *pstr = tetorimino->str;
+	
+	i=0,pstr+=26;//右端 
 
-		while(j<enumhTETORIMINO_NUM+1){
-
-			randData[j] = 1 + (int)(0 + rand() * ( (enumhTETORIMINO_NUM-1) - 0 + 1.0) / (1.0 + RAND_MAX) );
-
-			for(i=1;i<j;i++){
-				if(randData[i] == randData[j]){
-					j--;
+	for(y=0;y<enumhTETLIS_BLOCK;y++){
+		for(x=0;x<enumhTETLIS_BLOCK;x++){
+			switch( tetorimino->data[setTetoriminoData->z].data[setTetoriminoData->roll].data[y][x]){//model->data[i][j]
+				case 0:
+					sprintf(pstr,"　");
+					pstr+=2;
 					break;
-				}
+				case 1:case 2:
+					sprintf(pstr,"■");
+					pstr+=2;
+					break;
 			}
-			j++;
-			
-		}
+		}	
+		sprintf(pstr,"\n");
+		i++;
+		pstr+=26*i;//次の描画位置に移動
+	}
+}
+void Tetrimino_getRandamTetris(TETRIMINO *tetorimino){
+	int i,j,k;
+	int randData[enumhTETORIMINO_NUM+1];
+	i=0,j=0,k=0;
+
+	if(tetorimino->randTetris[0][i] == 0 && tetorimino->randTetris[1][i] != 0){
 		for(i=0;i<enumhTETORIMINO_NUM;i++){
-			tetorimino->randTetris[i] = randData[i+1];		
+			tetorimino->randTetris[k][i] = randData[i+1];		
 		}
-		
+		tetorimino->randTetris[k][0]=0;
+	}
+	while(k<2){
+
+		if(tetorimino->randTetris[k][0] == 0){
+
+			while(j<enumhTETORIMINO_NUM+1){
+
+				randData[j] = 1 + (int)(0 + rand() * ( (enumhTETORIMINO_NUM-1) - 0 + 1.0) / (1.0 + RAND_MAX) );
+
+				for(i=1;i<j;i++){
+					if(randData[i] == randData[j]){
+						j--;
+						break;
+					}
+				}
+				j++;
+			
+			}
+			for(i=0;i<enumhTETORIMINO_NUM;i++){
+				tetorimino->randTetris[k][i] = randData[i+1];		
+			}
+		}
+		k++;
 	}
 	
 }
 void Tetrimino_resetRandamTetris(TETRIMINO *tetorimino){
 	int i;
 	for(i=1;i<enumhTETORIMINO_NUM;i++){
-		tetorimino->randTetris[i-1] = tetorimino->randTetris[i];
-		tetorimino->randTetris[i]	= 0;
+		tetorimino->randTetris[0][i-1] = tetorimino->randTetris[0][i];
+		tetorimino->randTetris[0][i]	= 0;
 		
 	}
-	
+}
+void Tetrimino_setgetRandamTetris(TETRIMINO *tetorimino){
+	int i;
+	if(tetorimino->randTetris[0][1] == 0){
+		for(i=0;i<enumhTETORIMINO_NUM;i++){
+			tetorimino->randTetris[0][i+1] = tetorimino->randTetris[1][i];
+		}
+	}
 }
 void Tetrimino_setTetoriminoData(TETORIMINODATA *tetoriminoData,TETRIMINO *tetorimino){
 
@@ -252,7 +293,7 @@ void Tetrimino_setTetoriminoData(TETORIMINODATA *tetoriminoData,TETRIMINO *tetor
 
 	Tetrimino_getRandamTetris(tetorimino);
 
-	initialize.z = (*tetorimino->randTetris)-1;
+	initialize.z = tetorimino->randTetris[0][0]-1;
 	
 	*tetoriminoData = initialize;
 	
@@ -311,11 +352,11 @@ void Tetrimino_nextBlock(TETRIMINO *tetorimino){
 	
 	//描画
 	//printf("next BLock\n");
-	Tetrimino_draw(&initialze,tetorimino);
+	Tetrimino_draw_sprintf(&initialze,tetorimino);
 	
-	initialze.z = (tetorimino->randTetris[1]-1);
-	//printf("nextnext BLock\n");
-	Tetrimino_draw(&initialze,tetorimino);
+	//initialze.z = (tetorimino->randTetris[1]-1);
+	////printf("nextnext BLock\n");
+	//Tetrimino_draw_sprintf(&initialze,tetorimino);
 }
 
 void Tetrimino_seeNextBlock(TETRIMINO *tetorimino){
