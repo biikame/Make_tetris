@@ -36,7 +36,7 @@ typedef struct TYPE{
 }TYPE;
 typedef struct TETRIMINO{
 	TYPE data[enumhTETORIMINO_NUM];
-	int randTetris[2][enumhTETORIMINO_NUM];
+	int randTetris[2][enumhTETORIMINO_NUM+1];
 	char str[1000];
 }TETRIMINO;
 typedef struct TETORIMINODATA{

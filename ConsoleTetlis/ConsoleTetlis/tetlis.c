@@ -15,6 +15,7 @@
 **********************/
 void Tetlis_main(){
 
+	int i;
 	VIEW view;
 	MODEL model;
 	TETRIMINO tetorimino,nextBlock;
@@ -42,6 +43,11 @@ void Tetlis_main(){
 		Tetlis_setNextRand(&tetorimino);
 
 		Tetlis_draw(&view,&model,&tetorimino,&tetoriminoData);
+		for(i=0;i<8;i++){
+			printf("rand0 %d = %d",i,tetorimino.randTetris[0][i]);
+			
+			printf("rand1 %d = %d\n",i,tetorimino.randTetris[1][i]);
+		}
 		
 		if(Tetlis_gameOver(&view,&model,&tetorimino,&tetoriminoData)==0)
 			break;
@@ -110,9 +116,9 @@ int Tetlis_checkBlockInModel(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETOR
 void Tetlis_getKey(VIEW *view,MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
 
 	Tetlis_deleteBlock(view,model,tetorimino,tetoriminoData);
-	if(kbhit()){//毎回取得してくれる
+	//if(kbhit()){//毎回取得してくれる
 		Model_getkey(model,tetorimino,tetoriminoData);
-	}
+	//}
 	Model_moveBlock(model,tetorimino,tetoriminoData);
 
 	Tetlis_set(view,model,tetorimino,tetoriminoData);
