@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="model.c" />
+    <ClCompile Include="tetlis.c" />
+    <ClCompile Include="tetorimino.c" />
+    <ClCompile Include="view.c" />
+    <ClCompile Include="Winmain.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="model.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="tetlis.h" />
+    <ClInclude Include="tetorimino.h" />
+    <ClInclude Include="view.h" />
+  </ItemGroup>
+</Project>
