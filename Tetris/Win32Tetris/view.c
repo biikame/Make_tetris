@@ -2,8 +2,8 @@
 * Include *
 **********/
 #include "pch.h"
-#include "view.h"
-#include "model.h"
+#include "../Tetris/view.h"
+#include "../Tetris/model.h"
 /**********************
 * Function definition *
 **********************/

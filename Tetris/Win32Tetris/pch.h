@@ -3,9 +3,9 @@
 /**********
 * include *
 **********/
+#include "../Tetris/pch.h"
+#include <windows.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
 #include <conio.h>
 
 #endif

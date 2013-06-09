@@ -1,6 +1,7 @@
 ﻿/**********
 * Include *
 **********/
+#include "pch.h"
 #include "tetorimino.h"
 
 /**********************

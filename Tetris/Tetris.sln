@@ -6,6 +6,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleTetris", "ConsoleTetris\ConsoleTetris.vcxproj", "{9F7DC855-286B-4B40-8094-4BB606964777}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Win32Tetris", "Win32Tetris\Win32Tetris.vcxproj", "{3A3277A3-D2EE-4004-9EBA-8288B2B9CCED}"
+	ProjectSection(ProjectDependencies) = postProject
+		{679500AD-01BB-4680-B295-E4647E58725F} = {679500AD-01BB-4680-B295-E4647E58725F}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

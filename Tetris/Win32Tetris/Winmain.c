@@ -1,7 +1,8 @@
-#include <windows.h>
-#include <stdio.h>
-#include <conio.h>
-#include "tetlis.h"
+/**********
+* include *
+**********/
+#include "pch.h"
+#include "../Tetris/tetlis.h"
 
 #define TIMER_ID     (100)      // ì¬‚·‚éƒ^ƒCƒ}‚Ì¯•ÊID
 #define TIMER_ELAPSE (300)     // WM_TIMER‚Ì”­¶ŠÔŠu
