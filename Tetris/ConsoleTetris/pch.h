@@ -3,9 +3,9 @@
 /**********
 * include *
 **********/
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <conio.h>
+#include "../Tetris/pch.h"
+#include <Windows.h>
+#include<Mmsystem.h>
+#pragma comment(lib,"winmm")// winmm.lib をリンクする
 
 #endif

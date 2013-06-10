@@ -2,7 +2,8 @@
 * include *
 **********/
 #include "pch.h"
-#include "../Tetris/tetlis.h"
+#include "../Tetris/tetris.h"
+#include "view.h"
 
 #define TIMER_ID     (100)      // 作成するタイマの識別ID
 #define TIMER_ELAPSE (300)     // WM_TIMERの発生間隔
@@ -27,18 +28,14 @@ enum {
 };
 
 //テトリスで必要なデータの置き場
-VIEW view;
-MODEL model;
-TETRIMINO tetorimino,nextBlock;
-TETORIMINODATA tetoriminoData;
-char *strFile;
-MCIDEVICEID playID[2];
+static TETRIS *tetris;
+static VIEW *view;
+static MCIDEVICEID playID[2];
 
-int timer;
-int randflag;
+static int timer;
 
-LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-char szClassNme[] = "ウィンドウクラス・ネーム";
+static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+static char szClassNme[] = "ウィンドウクラス・ネーム";
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInst,
                    LPSTR lpszCmdLine, int nCmdShow)
@@ -100,14 +97,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     switch (msg) {
 		case WM_CREATE://ウィンドウが作られたとき
-			if(!randflag){
-				srand((unsigned int)time(NULL));
-				randflag=1;
-			}
-			Tetlis_init(&view,&model,&tetorimino,&tetoriminoData);
-			Tetlis_set(&view,&model,&tetorimino,&tetoriminoData);
-
-			strFile = "../BGM/WaVKorobeyniki_polka.wav";
+			tetris = Tetris_create();
+			view = View_create(tetris,hWnd);
 
 		break;
 		case WM_TIMER:
@@ -116,6 +107,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				break;  // 識別IDが一致しないタイマメッセージはDefWindowProc()に任せる
 			}
 
+			Tetris_timer(tetris);
 			InvalidateRect( hWnd, NULL, TRUE );
 
 			return 0;
@@ -126,37 +118,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			Sleep(100);
 
-			Tetlis_setNextRand(&tetorimino);
-
-			Tetlis_draw(&view,&model,&tetorimino,&tetoriminoData,hdc,hWnd);
-
-			if(Tetlis_gameOver(&view,&model,&tetorimino,&tetoriminoData)==0){
-				Tetlis_drawgameOver(&view,&model,&tetorimino,&tetoriminoData,hdc,hWnd);
-				DestroyWindow(hWnd);
-			}
-
-			Tetlis_deleteBlock(&view,&model,&tetorimino,&tetoriminoData);
-
-			//一升先のデータを確認、ブロックがあれば固定
-			if(Tetlis_checkBlockInModel(&view,&model,&tetorimino,&tetoriminoData)){
-				Tetlis_set(&view,&model,&tetorimino,&tetoriminoData);
-			}else{
-				//列が揃っていたら消す処理
-				Tetlis_deleteLine(&view,&model,&tetorimino,&tetoriminoData);
-				
-				Tetlis_set(&view,&model,&tetorimino,&tetoriminoData);
-				Tetlis_initBlock(&view,&model,&tetorimino,&tetoriminoData);
-			}
+			View_paint(view,hdc);
 
 			EndPaint(hWnd,&ps);
 		break;
 		case WM_KEYDOWN:
-		
-			 Tetlis_getKey(&view,&model,&tetorimino,&tetoriminoData,wParam);
-			 InvalidateRect( hWnd, NULL, TRUE );
+			Tetris_getKey(tetris,tolower(wParam));
+			InvalidateRect( hWnd, NULL, TRUE );
 		break;
         case WM_DESTROY:
-			
+			View_destroy(view);
+			Tetris_destroy(tetris);
             PostQuitMessage(0);
         break;
         default:

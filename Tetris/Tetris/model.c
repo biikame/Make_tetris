@@ -3,8 +3,7 @@
 **********/
 #include "pch.h"
 #include "model.h"
-#include "tetorimino.h"
-#include <Windows.h>
+#include "tetromino.h"
 
 /*******
 * Enum *
@@ -16,12 +15,7 @@ enum soundData{
 /**********************
 * Function definition *
 **********************/
-void Model_main(){
-	MODEL model;
-	Model_init2(&model);
-	Model_draw(&model);
-}
-void Model_init(MODEL* model){
+MODEL *Model_create(void){
 	MODEL initialize = {
 		{//配列の区別
 			{0,0,0,0,0,0,0,0,0,0,},
@@ -46,26 +40,15 @@ void Model_init(MODEL* model){
             {0,0,0,0,0,0,0,0,0,0,},
 		},
 	};
+	MODEL *model;
+	model = (MODEL *)(malloc(sizeof(*model)));
 	*model = initialize;
+	model->tetrominoData = TetrominoData_create();
+	return model;
 }
-void Model_init2(MODEL* model){
-	int y,x;
-	int data;
-	for(y=0;y<enumhMROW;y++){
-		for(x=0;x<enumhMCOL;x++){
-
-			if( y==0				&& x==0				||
-				y==0				&& x==enumhMCOL-1	||
-				y == enumhMROW-1	&& x ==0			||
-				y == enumhMROW-1	&& x == enumhMCOL-1
-			)
-				Model_setBlock(model,y,x,1);
-			else{
-				Model_setBlock(model,y,x,0);
-			}
-				
-		}
-	}
+void Model_destroy(MODEL *model){
+	TetrominoData_destroy(model->tetrominoData);
+	free(model);
 }
 void Model_setBlock	(MODEL* model,int y,int x,int variable){
 	model->data[y][x] = variable;
@@ -90,96 +73,96 @@ void Model_draw(MODEL* const model){
 		printf("\n");
 	}
 }
-void Model_setBlockInModel(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
+void Model_setBlockInModel(MODEL *model){
 	int y,x;
 	
-	for(y=0;y<enumhTETLIS_BLOCK-tetoriminoData->gapBlockY;y++){
-		for(x=0;x<enumhTETLIS_BLOCK-tetoriminoData->gapBlockX;x++){
-			//printf("%d",tetorimino->data[tetoriminoData->z].data[tetoriminoData->roll].data[y][x]);
+	for(y=0;y<enumhTETLIS_BLOCK-model->tetrominoData->gapBlockY;y++){
+		for(x=0;x<enumhTETLIS_BLOCK-model->tetrominoData->gapBlockX;x++){
+			//printf("%d",tetromino->data[model->tetrominoData->z].data[model->tetrominoData->roll].data[y][x]);
 			
-			model->data[y+tetoriminoData->blockY][x+tetoriminoData->blockX] += tetorimino->data[tetoriminoData->z].data[tetoriminoData->roll].data[y+tetoriminoData->gapBlockY][x+tetoriminoData->gapBlockX];
+			model->data[y+model->tetrominoData->blockY][x+model->tetrominoData->blockX] += model->tetrominoData->tetromino->data[model->tetrominoData->z].data[model->tetrominoData->roll].data[y+model->tetrominoData->gapBlockY][x+model->tetrominoData->gapBlockX];
 		}
 		//printf("\n");
 	}
 }
-void Model_deleteBlockInModel(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
+void Model_deleteBlockInModel(MODEL *model){
 	int y,x;
 	
-	for(y=0;y<enumhTETLIS_BLOCK-tetoriminoData->gapBlockY;y++){
-		for(x=0;x<enumhTETLIS_BLOCK-tetoriminoData->gapBlockX;x++){
-			//printf("%d",tetorimino->data[tetoriminoData->z].data[tetoriminoData->roll].data[y][x]);
+	for(y=0;y<enumhTETLIS_BLOCK-model->tetrominoData->gapBlockY;y++){
+		for(x=0;x<enumhTETLIS_BLOCK-model->tetrominoData->gapBlockX;x++){
+			//printf("%d",tetromino->data[model->tetrominoData->z].data[model->tetrominoData->roll].data[y][x]);
 			
-			model->data[y+tetoriminoData->blockY][x+tetoriminoData->blockX] -= tetorimino->data[tetoriminoData->z].data[tetoriminoData->roll].data[y+tetoriminoData->gapBlockY][x+tetoriminoData->gapBlockX];
+			model->data[y+model->tetrominoData->blockY][x+model->tetrominoData->blockX] -= model->tetrominoData->tetromino->data[model->tetrominoData->z].data[model->tetrominoData->roll].data[y+model->tetrominoData->gapBlockY][x+model->tetrominoData->gapBlockX];
 		}
 		//printf("\n");
 	}
 }
-int Model_checkBlockInModel(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData,int checkY,int checkX){
+int Model_checkBlockInModel(MODEL *model,int checkY,int checkX){
 	int y,x;
-	int *BlockData = &tetorimino->data[tetoriminoData->z].data[tetoriminoData->roll].data[tetoriminoData->y][tetoriminoData->x];
+	int *BlockData = &model->tetrominoData->tetromino->data[model->tetrominoData->z].data[model->tetrominoData->roll].data[model->tetrominoData->y][model->tetrominoData->x];
 	for(y=0;y<enumhTETLIS_BLOCK;y++){
 		for(x=0;x<enumhTETLIS_BLOCK;x++){
 			
-			if(tetorimino->data[tetoriminoData->z].data[tetoriminoData->roll].data[y][x]>0){//ブロックのある場所が
+			if(model->tetrominoData->tetromino->data[model->tetrominoData->z].data[model->tetrominoData->roll].data[y][x]>0){//ブロックのある場所が
 				
-				if(model->data[y+checkY-tetoriminoData->gapBlockY][x+checkX-tetoriminoData->gapBlockX] > 0 ||
-					(x+checkX-tetoriminoData->gapBlockX)>=enumhMCOL ||(x+checkX-tetoriminoData->gapBlockX)<0|| 
-					(y+checkY-tetoriminoData->gapBlockY)>=enumhMROW ||(y+checkY-tetoriminoData->gapBlockY)<0)
+				if(model->data[y+checkY-model->tetrominoData->gapBlockY][x+checkX-model->tetrominoData->gapBlockX] > 0 ||
+					(x+checkX-model->tetrominoData->gapBlockX)>=enumhMCOL ||(x+checkX-model->tetrominoData->gapBlockX)<0|| 
+					(y+checkY-model->tetrominoData->gapBlockY)>=enumhMROW ||(y+checkY-model->tetrominoData->gapBlockY)<0)
 				{//ステージデータ+check位置
 					return 0;
 				}
 			}
 		}
 	}
-	tetoriminoData->blockY = checkY;
-	tetoriminoData->blockX = checkX;
+	model->tetrominoData->blockY = checkY;
+	model->tetrominoData->blockX = checkX;
 	return 1;
 }
-void Model_moveBlock(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
-	Model_setBlockInModel(model,tetorimino,tetoriminoData);
+void Model_moveBlock(MODEL *model){
+	Model_setBlockInModel(model);
 }
-void Model_getkey(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData,WPARAM key){
+void Model_getkey(MODEL *model,int key){
 	int VX,VY;
 	VX=0,VY=0;
 	switch(key){
-		case 0x41:VX--;break;
-		case 0x44:VX++;break;
+		case 'a':VX--;break;
+		case 'd':VX++;break;
 		//case 'w':VX--;break;
 		//case 's':VX++;break;
-		case 0x46:Model_rotate(model,tetorimino,tetoriminoData,1);Model_sound(BOTTON);break;
-		case 0x43:Model_rotate(model,tetorimino,tetoriminoData,0);Model_sound(BOTTON);break;
+		case 'f':Model_rotate(model,1);Model_sound(BOTTON);break;
+		case 'c':Model_rotate(model,0);Model_sound(BOTTON);break;
 	}
-	Model_checkBlockInModel(model,tetorimino,tetoriminoData,tetoriminoData->blockY+VY,tetoriminoData->blockX+VX);
+	Model_checkBlockInModel(model,model->tetrominoData->blockY+VY,model->tetrominoData->blockX+VX);
 }
-void Model_rotate(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData,int flag){
+void Model_rotate(MODEL *model,int flag){
 	if(flag){
-		if(tetoriminoData->roll == enumhROLL-1){
-			tetoriminoData->roll = 0;
+		if(model->tetrominoData->roll == enumhROLL-1){
+			model->tetrominoData->roll = 0;
 		}else{
-			tetoriminoData->roll++;
+			model->tetrominoData->roll++;
 		}
 	}else{
-		if(tetoriminoData->roll == 0){
-			tetoriminoData->roll = 3;
+		if(model->tetrominoData->roll == 0){
+			model->tetrominoData->roll = 3;
 		}else{
-			tetoriminoData->roll--;
+			model->tetrominoData->roll--;
 		}
 	}
-	Tetrimino_updateTetoriminoData(tetoriminoData,tetorimino);//ずれをあわせる
+	TetrominoData_update(model->tetrominoData);//ずれをあわせる
 
-	if(Model_checkBlockInModel(model,tetorimino,tetoriminoData,tetoriminoData->blockY,tetoriminoData->blockX)==0){
+	if(Model_checkBlockInModel(model,model->tetrominoData->blockY,model->tetrominoData->blockX)==0){
 		
-		if(tetoriminoData->roll==0){//ここで２時間バグ取り
-			tetoriminoData->roll=enumhROLL-1;
+		if(model->tetrominoData->roll==0){//ここで２時間バグ取り
+			model->tetrominoData->roll=enumhROLL-1;
 		}else{
-			tetoriminoData->roll--;
+			model->tetrominoData->roll--;
 		}
-		Tetrimino_updateTetoriminoData(tetoriminoData,tetorimino);//ずれをあわせる
+		TetrominoData_update(model->tetrominoData);//ずれをあわせる
 	}else{
-		Tetrimino_updateTetoriminoData(tetoriminoData,tetorimino);//ずれをあわせる
+		TetrominoData_update(model->tetrominoData);//ずれをあわせる
 	}
 }
-void Model_deleteLine(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData,int deleteLine){
+void Model_deleteLine(MODEL *model,int deleteLine){
 	int x,y;
 	//for(x=0;x<enumhMCOL;x++){//一列揃ったデータを消してます
 	//	model->data[deleteLine][x] = 0;
@@ -196,7 +179,7 @@ void Model_deleteLine(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetorim
 		}
 	}
 }
-void Model_checkLine(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
+void Model_checkLine(MODEL *model){
 	int y,x;
 	for(y=enumhMROW-1;y>0;y--){
 		
@@ -204,13 +187,13 @@ void Model_checkLine(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetorimi
 			if(model->data[y][x] == 0){
 				break;
 			}else if(x == enumhMCOL-1){//ブロックが一列揃っている
-				Model_deleteLine(model,tetorimino,tetoriminoData,y);
+				Model_deleteLine(model,y);
 				y++;
 			}
 		}
 	}
 }
-int Model_gameOver(MODEL *model,TETRIMINO *tetorimino,TETORIMINODATA *tetoriminoData){
+int Model_gameOver(MODEL *model){
 	int y,x;
 	for(y=0;y<enumhMROW;y++){
 		for(x=0;x<enumhMCOL;x++){

@@ -16,15 +16,16 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="tetlis.c" />
-    <ClCompile Include="tetorimino.c" />
+    <ClCompile Include="tetris.c" />
+    <ClCompile Include="tetromino.c" />
+    <ClCompile Include="tetrominoData.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="model.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="tetlis.h" />
-    <ClInclude Include="tetorimino.h" />
-    <ClInclude Include="view.h" />
+    <ClInclude Include="tetris.h" />
+    <ClInclude Include="tetromino.h" />
+    <ClInclude Include="tetrominoData.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{679500AD-01BB-4680-B295-E4647E58725F}</ProjectGuid>

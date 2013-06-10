@@ -3,14 +3,15 @@
   <ItemGroup>
     <ClCompile Include="pch.c" />
     <ClCompile Include="model.c" />
-    <ClCompile Include="tetlis.c" />
-    <ClCompile Include="tetorimino.c" />
+    <ClCompile Include="tetris.c" />
+    <ClCompile Include="tetromino.c" />
+    <ClCompile Include="tetrominoData.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="model.h" />
-    <ClInclude Include="tetlis.h" />
-    <ClInclude Include="tetorimino.h" />
-    <ClInclude Include="view.h" />
+    <ClInclude Include="tetris.h" />
+    <ClInclude Include="tetromino.h" />
+    <ClInclude Include="tetrominoData.h" />
   </ItemGroup>
 </Project>

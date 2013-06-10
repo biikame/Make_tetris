@@ -3,16 +3,11 @@
 **********/
 #include "pch.h"
 #include "view.h"
-#include "model.h"
+#include "../Tetris/tetris.h"
 /**********************
 * Function definition *
 **********************/
-void View_main(){
-	VIEW view;
-	View_init2(&view);
-	View_draw(&view);
-}
-void View_init(VIEW *view){
+VIEW *View_create(TETRIS* tetris){
 	VIEW initialize = {
 		{//配列の区別
             {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,},
@@ -38,24 +33,15 @@ void View_init(VIEW *view){
             {1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,},
             {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,},
         }
-   };
-   *view = initialize;
+	};
+	VIEW *view;
+	view = (VIEW *)(malloc(sizeof(*view)));
+	*view = initialize;
+	view->tetris = tetris;
+	return view;
 }
-
-void View_init2	(VIEW *view){
-	int y,x;
-	for(y=0;y<enumhVROW;y++){
-		for(x=0;x<enumhVCOL;x++){
-			if(	y==0			||
-				y==enumhVROW-1	||
-				x==0			||
-				x==enumhVCOL-1
-			)
-				View_setBlock(view,y,x,1);
-			else
-				View_setBlock(view,y,x,0);
-		}
-	}
+void View_destroy(VIEW *view){
+	free(view);
 }
 
 int View_getBlock	(VIEW *view,int y,int x){
@@ -63,6 +49,18 @@ int View_getBlock	(VIEW *view,int y,int x){
 }
 void View_setBlock	(VIEW *view,int y,int x,int variable){
 	view->data[y][x] = variable;
+}
+int View_paint(VIEW *view){
+	View_setView(view);
+	View_setViewNextBlock(view);
+	if(!(view->tetris->isGameOver)){
+		View_draw(view);
+		return 0;
+	}
+	else{
+		View_drawGameOver(view);
+		return 1;
+	}
 }
 void View_draw(VIEW *const view){
 	int y,x;
@@ -91,10 +89,10 @@ void View_draw(VIEW *const view){
 	}
 }
 
-void View_draw_sprintf(VIEW *view,TETRIMINO *tetrimino){
+void View_draw_sprintf(VIEW *view){
 
 	int y,x;
-	char *pstr = tetrimino->str;
+	char *pstr = view->tetris->model->tetrominoData->tetromino->str;
 
 	for(y=0;y<enumhVROW;y++){
 		for(x=0;x<enumhVCOL;x++){
@@ -120,31 +118,57 @@ void View_draw_sprintf(VIEW *view,TETRIMINO *tetrimino){
 		sprintf(pstr,"\n");
 		pstr++;
 	}
-	puts(tetrimino->str);//全体の描画
+	puts(view->tetris->model->tetrominoData->tetromino->str);//全体の描画
 }
-void View_setView(VIEW *view,MODEL *model,TETRIMINO *tetrimino,TETORIMINODATA *setTetoriminoData){
+void View_setView(VIEW *view){
 	int y,x;
 	for(y=0;y<enumhMROW;y++){
 		for(x=0;x<enumhMCOL;x++){
-			view->data[y+1][x+1] = model->data[y][x];
+			view->data[y+1][x+1] = view->tetris->model->data[y][x];
 		}
 	}
 }
-void View_setViewNextBlock(VIEW *view,MODEL *model,TETRIMINO *tetrimino,TETORIMINODATA *setTetoriminoData){
+void View_setViewNextBlock(VIEW *view){
 
 	int y,x;
 	for(y=0;y<enumhTETLIS_BLOCK;y++){
 		for(x=0;x<enumhTETLIS_BLOCK;x++){
-			view->data[y+1][10+x+2] = tetrimino->data[tetrimino->randTetris[0][0]-1].data[0].data[y][x];
+			view->data[y+1][10+x+2] = view->tetris->model->tetrominoData->tetromino->data[view->tetris->model->tetrominoData->tetromino->randTetris[0][0]-1].data[0].data[y][x];
 		}
 	}
 	for(y=0;y<enumhTETLIS_BLOCK;y++){
 		for(x=0;x<enumhTETLIS_BLOCK;x++){
-			view->data[y+5][10+x+2] = tetrimino->data[tetrimino->randTetris[0][1]-1].data[0].data[y][x];
+			view->data[y+5][10+x+2] = view->tetris->model->tetrominoData->tetromino->data[view->tetris->model->tetrominoData->tetromino->randTetris[0][1]-1].data[0].data[y][x];
 		}
 	}
 }
-void View_gameOVer_draw(VIEW *const view,MODEL *model){
+
+void View_drawGameOver(VIEW *view){
+	View_gameOver_mixDraw(view);
+
+	system("cls");
+
+	printf("\n\
+ 　 　┏━━━━┓　 　 ┏━━┓　 　 ┏━┓　 　 ┏━┓┏━━━━━━┓ \n\
+ 　 ┏┛┏━━━┛　 ┏┛┏┓┗┓　 ┃　 ┗┓┏┛　 ┃┃　 ┏━━━━┛ \n\
+ ┏┛┏┛　 　 　 　 ┏┛┏┛┗┓┗┓┃　 　 ┗┛　 　 ┃┃　 ┃ \n\
+ ┃　 ┃┏━━━┓┃　 ┃　 　 ┃　 ┃┃　 　 　 　 　 　 ┃┃　 ┗━━━┓ \n\
+ ┃　 ┃┗━┓　 ┃┃　 ┗━━┛　 ┃┃　 ┏┓┏┓　 ┃┃　 ┏━━━┛ \n\
+ ┗┓┗┓　 ┃　 ┃┃　 ┏━━┓　 ┃┃　 ┃┗┛┃　 ┃┃　 ┃ \n\
+ 　 ┃　 ┗━┛　 ┃┃　 ┃　 　 ┃　 ┃┃　 ┃　 　 ┃　 ┃┃　 ┗━━━━┓ \n\
+ 　 ┗━━━━━┛┗━┛　 　 ┗━┛┗━┛　 　 ┗━┛┗━━━━━━┛ \n\
+ 　 ┏━━━━┓　 ┏━┓　 　 ┏━┓┏━━━━━━┓┏━━━━━┓ \n\
+ ┏┛┏━━┓┗┓┃　 ┃　 　 ┃　 ┃┃　 ┏━━━━┛┃　 ┏━━┓┗┓ \n\
+ ┃　 ┃　 　 ┃　 ┃┃　 ┃　 　 ┃　 ┃┃　 ┃　 　 　 　 　 ┃　 ┃　 　 ┃　 ┃ \n\
+ ┃　 ┃　 　 ┃　 ┃┃　 ┗┓┏┛　 ┃┃　 ┗━━━┓　 ┃　 ┃　 ┏┛　 ┃ \n\
+ ┃　 ┃　 　 ┃　 ┃┗┓　 ┗┛　 ┏┛┃　 ┏━━━┛　 ┃　 ┗━┛┏━┛ \n\
+ ┃　 ┃　 　 ┃　 ┃　 ┗┓　 　 ┏┛　 ┃　 ┃　 　 　 　 　 ┃　 ┏┓　 ┗┓ \n\
+ ┗┓┗━━┛┏┛　 　 ┗┓┏┛　 　 ┃　 ┗━━━━┓┃　 ┃┗┓　 ┗┓ \n\
+ 　 ┗━━━━┛　 　 　 　 ┗┛　 　 　 ┗━━━━━━┛┗━┛　 ┗━━┛ \n");
+
+	printf("\n");
+}
+void View_gameOver_draw(VIEW *const view){
 
 	static int y,x,flag;
 
@@ -161,15 +185,15 @@ void View_gameOVer_draw(VIEW *const view,MODEL *model){
 	View_draw(view);
 	
 
-	View_gameOVer_draw(view,model);
+	View_gameOver_draw(view);
 }
 
-void View_gameOVer_draw2(VIEW *view,MODEL *model){
+void View_gameOver_draw2(VIEW *view){
 
 	int y,x;
 	for(y=0;y<enumhMROW;y++){
 		for(x=0;x<enumhMCOL;x++){	
-			switch(model->data[y][x]){
+			switch(view->tetris->model->data[y][x]){
 				case 0:break;
 				default: view->data[y+1][x+1]= 3;break;
 			}
@@ -180,7 +204,7 @@ void View_gameOVer_draw2(VIEW *view,MODEL *model){
 	}
 }
 
-void View_gameOVer_draw3(VIEW *view,MODEL *model){
+void View_gameOver_draw3(VIEW *view){
 
 	static int y,x,flag;
 
@@ -199,11 +223,11 @@ void View_gameOVer_draw3(VIEW *view,MODEL *model){
 	View_draw(view);
 	
 
-	View_gameOVer_draw3(view,model);
+	View_gameOver_draw3(view);
 }
 
-void View_gameOVer_mixDraw(VIEW *view,MODEL *model){
-	View_gameOVer_draw2(view,model);
-	View_gameOVer_draw3(view,model);
-	View_gameOVer_draw(view,model);
+void View_gameOver_mixDraw(VIEW *view){
+	View_gameOver_draw2(view);
+	View_gameOver_draw3(view);
+	View_gameOver_draw(view);
 }
