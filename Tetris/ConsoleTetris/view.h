@@ -25,28 +25,28 @@ enum {
 typedef struct VIEW{
 	int data[enumhVROW][enumhVCOL];
 	TETRIS *tetris;
-} VIEW;
+}VIEW;
 /*********************************
 * Function prototype declaration *
 *********************************/
-VIEW *View_create	(TETRIS *tetris,HWND hWnd);
+VIEW *View_create	(TETRIS *tetris);
 void View_destroy	(VIEW *view);
 
 int	 View_getBlock	(VIEW *view,int y,int x);
 void View_setBlock	(VIEW *view,int y,int x,int variable);
 
-void View_paint		(VIEW *view,HDC hdc,HWND hWnd);
-void View_draw		(VIEW *view,HDC hdc,HWND hWnd);
+int View_paint		(VIEW *view);
+void View_draw		(VIEW *view);
 void View_setView	(VIEW *view);
 void View_setViewNextBlock(VIEW *view);
 
 //sprintf用
 void View_draw_sprintf(VIEW *view);
 
-void View_drawGameOver(VIEW *view,HDC hdc,HWND hWnd);
-void View_gameOver_mixDraw(VIEW *view,HDC hdc,HWND hWnd);
+void View_drawGameOver(VIEW *view);
+void View_gameOver_mixDraw(VIEW *view);
 //gameOver処理の部品
-void View_gameOver_draw (VIEW *view,HDC hdc,HWND hWnd);
-void View_gameOver_draw2(VIEW *view,HDC hdc,HWND hWnd);
-void View_gameOver_draw3(VIEW *view,HDC hdc,HWND hWnd);
+void View_gameOver_draw (VIEW *view);
+void View_gameOver_draw2(VIEW *view);
+void View_gameOver_draw3(VIEW *view);
 #endif __VIEW_H__

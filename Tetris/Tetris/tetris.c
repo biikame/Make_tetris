@@ -115,6 +115,6 @@ void stopSound(MCIDEVICEID stopID)
 	return;
 }
 
-void Tetris_setNextRand(TETROMINO *tetromino){
-	Tetromino_setgetRandamTetris(tetromino);
+void Tetris_setNextRand(TETRIS *tetris){
+	Tetromino_setgetRandamTetris(tetris->model->tetrominoData->tetromino);
 }

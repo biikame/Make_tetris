@@ -66,17 +66,17 @@ int View_getBlock	(VIEW *view,int y,int x){
 void View_setBlock	(VIEW *view,int y,int x,int variable){
 	view->data[y][x] = variable;
 }
-void View_paint(VIEW *view,HDC hdc){
+void View_paint(VIEW *view,HDC hdc,HWND hWnd){
 	View_setView(view);
 	View_setViewNextBlock(view);
 	if(!(view->tetris->isGameOver)){
-		View_draw(view,hdc);
+		View_draw(view,hdc,hWnd);
 	}
 	else{
-		View_drawGameOver(view,hdc);
+		View_drawGameOver(view,hdc,hWnd);
 	}
 }
-void View_draw(VIEW *const view,HDC hdc){
+void View_draw(VIEW *const view,HDC hdc,HWND hWnd){
 
 	typedef struct{
 		HPEN hPen,hOldPen;
@@ -88,7 +88,7 @@ void View_draw(VIEW *const view,HDC hdc){
 
 	//system("cls");
 
-	GetClientRect(view->hWnd,&rt);//rtにウィンドウの座標を取得してる
+	GetClientRect(hWnd,&rt);//rtにウィンドウの座標を取得してる
 
 	//グリット線
 	pinkred.hPen	= CreatePen(PS_SOLID,1,RGB(255,0,255));
@@ -229,11 +229,11 @@ void View_setViewNextBlock(VIEW *view){
 	}
 }
 
-void View_drawGameOver(VIEW *view,HDC hdc){
-	View_gameOver_mixDraw(view,hdc);
-	DestroyWindow(view->hWnd);
+void View_drawGameOver(VIEW *view,HDC hdc,HWND hWnd){
+	View_gameOver_mixDraw(view,hdc,hWnd);
+	DestroyWindow(hWnd);
 }
-void View_gameOver_draw(VIEW *const view,HDC hdc){
+void View_gameOver_draw(VIEW *const view,HDC hdc,HWND hWnd){
 
 	static int y,x,flag;
 
@@ -247,12 +247,12 @@ void View_gameOver_draw(VIEW *const view,HDC hdc){
 		}
 	}
 	Sleep(100);
-	View_draw(view,hdc);	
+	View_draw(view,hdc,hWnd);	
 
-	View_gameOver_draw(view,hdc);
+	View_gameOver_draw(view,hdc,hWnd);
 }
 
-void View_gameOver_draw2(VIEW *view,HDC hdc){
+void View_gameOver_draw2(VIEW *view,HDC hdc,HWND hWnd){
 
 	int y,x;
 	for(y=0;y<enumhMROW;y++){
@@ -263,12 +263,12 @@ void View_gameOver_draw2(VIEW *view,HDC hdc){
 			}
 		}
 		Sleep(100);
-		View_draw(view,hdc);
+		View_draw(view,hdc,hWnd);
 		
 	}
 }
 
-void View_gameOver_draw3(VIEW *view,HDC hdc){
+void View_gameOver_draw3(VIEW *view,HDC hdc,HWND hWnd){
 
 	static int y,x,flag;
 
@@ -284,14 +284,14 @@ void View_gameOver_draw3(VIEW *view,HDC hdc){
 		}
 	}
 	Sleep(100);
-	View_draw(view,hdc);
+	View_draw(view,hdc,hWnd);
 	
 
-	View_gameOver_draw3(view,hdc);
+	View_gameOver_draw3(view,hdc,hWnd);
 }
 
-void View_gameOver_mixDraw(VIEW *view,HDC hdc){
-	View_gameOver_draw2(view,hdc);
-	View_gameOver_draw3(view,hdc);
-	View_gameOver_draw(view,hdc);
+void View_gameOver_mixDraw(VIEW *view,HDC hdc,HWND hWnd){
+	View_gameOver_draw2(view,hdc,hWnd);
+	View_gameOver_draw3(view,hdc,hWnd);
+	View_gameOver_draw(view,hdc,hWnd);
 }

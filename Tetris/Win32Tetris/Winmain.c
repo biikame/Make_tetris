@@ -55,7 +55,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInst,
         myProg.hInstance        =hInstance;
         myProg.hIcon            =NULL;
         myProg.hCursor			=LoadCursor(NULL, IDC_ARROW);
-        myProg.hbrBackground    =GetStockObject(WHITE_BRUSH);
+        myProg.hbrBackground    =GetStockObject(NULL_BRUSH);
         myProg.lpszMenuName		=NULL;
         myProg.lpszClassName    =szClassNme;
         if (!RegisterClass(&myProg))
@@ -116,9 +116,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		case WM_PAINT:
 			hdc = BeginPaint(hWnd,&ps);
 
-			Sleep(100);
-
-			View_paint(view,hdc);
+			View_paint(view,hdc,hWnd);
 
 			EndPaint(hWnd,&ps);
 		break;
